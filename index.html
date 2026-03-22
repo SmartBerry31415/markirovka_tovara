@@ -5,94 +5,361 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Поиск статуса маркировки</title>
   <meta name="description" content="Быстрый поиск кодов и текущего статуса маркировки по категории, товарной группе и дополнительной группе.">
-  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=Xm2e9vCHoLJ1Cw9fBLt4mhVA5iSC1SWxQMtBrtFDwm667fE7lUKiWRkp73PuVb3SDOIyVQmt0au6JMFikvMK6zq248sveiXsNONBzB9ffpxl7U4GD-0Ss4ESZ65SRT5jTrOqgmHvFgGj1RwuRHEgfbfIF_5xQsXObIE4_JQn5x4lqmsaFQlwJnyMpXLWDf-c0Kyc4j9hUccDM7boBDWj39h04hc80OCZhUeiR52TpqW8Vf0uH4ui3m5CnIlxaxDGtTMQCnjEFNl6Xr0UFJL8tg" charset="UTF-8"></script><style>
-    :root {
-      --bg: #f5f7fb;
-      --card: #ffffff;
-      --text: #172033;
-      --muted: #64748b;
-      --line: #d9e2f0;
-      --brand: #2f5bea;
-      --brand-soft: #eef3ff;
-      --success: #0f766e;
-      --danger: #b42318;
-      --shadow: 0 8px 28px rgba(23,32,51,.08);
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=CG5PRewdseL7xUHJLhKxZlwXT4mo0UM1Kc_VvvgfUuSMlGoP1CxdPkdqur9G5Umb6A9F1CfVsfebtLS19M88mQyzu9CCaIG8frs3yqwL4aXljM9GJ1LyTlxWZRcOoz-CZI19QgvZm9sloUPQ5h-pL3ENwmmtmGGW8qrE8DTKyqVq5xIrwNoUPcDKrm1afVZsWLu9uSYR4Wu6TKOAocwAPRQYRju713XHcv27xtgGrqmVsluCj0CXC78DlrG2wCUtKTmH3BmVAQ8Dudv4YffK4g" charset="UTF-8"></script><style>
+  :root {
+    --bg: #f5f7fb;
+    --card: #ffffff;
+    --text: #172033;
+    --muted: #64748b;
+    --line: #d9e2f0;
+    --brand: #2f5bea;
+    --brand-soft: #eef3ff;
+    --success: #0f766e;
+    --danger: #b42318;
+    --shadow: 0 8px 28px rgba(23,32,51,.08);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: radial-gradient(circle at top left, #ffffff 0%, #f5f7fb 45%, #eef3ff 100%);
+    color: var(--text);
+    line-height: 1.45;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 14px 12px 28px;
+  }
+
+  .hero,
+  .card {
+    background: #fff;
+    border: 1px solid rgba(47,91,234,.10);
+    box-shadow: var(--shadow);
+    border-radius: 22px;
+  }
+
+  .hero {
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: var(--brand-soft);
+    color: var(--brand);
+    font-weight: 700;
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: clamp(24px, 7vw, 44px);
+    line-height: 1.05;
+    letter-spacing: -.03em;
+  }
+
+  .meta {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .grid {
+    display: grid;
+    gap: 12px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+
+  .step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: var(--brand-soft);
+    color: var(--brand);
+    font-weight: 800;
+    font-size: 16px;
+    flex: 0 0 auto;
+  }
+
+  .step h2 {
+    margin: 0 0 12px;
+    font-size: clamp(18px, 5vw, 30px);
+    line-height: 1.1;
+  }
+
+  label {
+    display: block;
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  select {
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    background: #fff;
+    border: 1.5px solid #bdd0ff;
+    border-radius: 16px;
+    min-height: 54px;
+    padding: 14px 46px 14px 14px;
+    font-size: 16px;
+    line-height: 1.25;
+    color: var(--text);
+    background-image:
+      linear-gradient(45deg, transparent 50%, #5c6f99 50%),
+      linear-gradient(135deg, #5c6f99 50%, transparent 50%);
+    background-position: calc(100% - 21px) calc(50% - 3px), calc(100% - 15px) calc(50% - 3px);
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+  }
+
+  select:disabled {
+    background-color: #f3f6fb;
+    color: #94a3b8;
+    border-color: #d8e0ee;
+  }
+
+  select:focus-visible,
+  .btn:focus-visible {
+    outline: 3px solid rgba(47,91,234,.18);
+    outline-offset: 1px;
+  }
+
+  .hint {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .hidden { display: none !important; }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .btn {
+    width: 100%;
+    border: 0;
+    border-radius: 16px;
+    min-height: 50px;
+    padding: 13px 16px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .06s ease, opacity .15s ease;
+    text-align: center;
+  }
+
+  .btn:active { transform: translateY(1px); }
+
+  .btn-primary {
+    background: var(--brand);
+    color: #fff;
+    box-shadow: 0 10px 22px rgba(47,91,234,.24);
+  }
+
+  .btn-secondary {
+    background: #eef3ff;
+    color: var(--brand);
+  }
+
+  .btn-ghost {
+    background: #f5f7fb;
+    color: var(--text);
+    border: 1px solid var(--line);
+  }
+
+  .summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  .chip {
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: #f5f7fb;
+    border: 1px solid var(--line);
+    font-size: 12px;
+    color: #334155;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .result-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .result-title {
+    margin: 0;
+    font-size: clamp(22px, 6vw, 34px);
+    line-height: 1.05;
+  }
+
+  .ok {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    color: var(--success);
+    background: #ecfdf5;
+    border: 1px solid #bbf7d0;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .warn {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    color: var(--danger);
+    background: #fef3f2;
+    border: 1px solid #fecdca;
+    padding: 10px 12px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .result-block + .result-block {
+    margin-top: 14px;
+  }
+
+  .result-block h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+  }
+
+  .pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    background: #fbfcff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 14px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .empty { color: var(--muted); }
+
+  @media (min-width: 700px) {
+    .wrap {
+      padding: 20px 16px 48px;
     }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
-    body {
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      background: radial-gradient(circle at top left, #ffffff 0%, #f5f7fb 45%, #eef3ff 100%);
-      color: var(--text);
-      line-height: 1.45;
-    }
-    .wrap { max-width: 920px; margin: 0 auto; padding: 20px 16px 48px; }
-    .hero, .card {
-      background: #fff;
-      border: 1px solid rgba(47,91,234,.10);
-      box-shadow: var(--shadow);
+
+    .hero,
+    .card {
       border-radius: 28px;
     }
-    .hero { padding: 20px; margin-bottom: 18px; }
+
+    .hero {
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
     .badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 12px; border-radius: 999px;
-      background: var(--brand-soft); color: var(--brand);
-      font-weight: 700; font-size: 13px; margin-bottom: 12px;
+      padding: 8px 12px;
+      font-size: 13px;
+      margin-bottom: 12px;
     }
-    h1 { margin: 0 0 10px; font-size: clamp(28px, 4vw, 44px); line-height: 1.05; letter-spacing: -.03em; }
-    .meta { margin-top: 12px; color: var(--muted); font-size: 14px; }
-    .grid { display: grid; gap: 14px; }
-    .card { padding: 18px; }
-    .step { display: grid; grid-template-columns: 42px 1fr; gap: 14px; align-items: start; }
+
+    .meta {
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    .grid {
+      gap: 14px;
+    }
+
+    .card {
+      padding: 18px;
+    }
+
+    .step {
+      grid-template-columns: 42px 1fr;
+      gap: 14px;
+    }
+
     .step-num {
-      width: 42px; height: 42px; border-radius: 999px; display: grid; place-items: center;
-      background: var(--brand-soft); color: var(--brand); font-weight: 800; font-size: 18px;
+      width: 42px;
+      height: 42px;
+      font-size: 18px;
     }
-    .step h2 { margin: 0 0 14px; font-size: clamp(20px, 3vw, 30px); line-height: 1.1; }
-    label { display: block; margin: 0 0 8px; font-size: 14px; font-weight: 700; }
+
     select {
-      width: 100%; appearance: none; -webkit-appearance: none; background: #fff;
-      border: 1.5px solid #bdd0ff; border-radius: 18px; padding: 16px 48px 16px 16px;
-      font-size: 17px; line-height: 1.25; color: var(--text);
-      background-image:
-        linear-gradient(45deg, transparent 50%, #5c6f99 50%),
-        linear-gradient(135deg, #5c6f99 50%, transparent 50%);
-      background-position: calc(100% - 22px) calc(50% - 3px), calc(100% - 16px) calc(50% - 3px);
-      background-size: 6px 6px, 6px 6px; background-repeat: no-repeat;
-      box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+      min-height: 56px;
+      border-radius: 18px;
+      padding: 16px 48px 16px 16px;
+      font-size: 17px;
     }
-    select:disabled { background-color: #f3f6fb; color: #94a3b8; border-color: #d8e0ee; }
-    select:focus-visible, .btn:focus-visible { outline: 3px solid rgba(47,91,234,.18); outline-offset: 1px; }
-    .hint { margin-top: 8px; color: var(--muted); font-size: 13px; }
-    .hidden { display: none !important; }
-    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+
+    .hint {
+      font-size: 13px;
+    }
+
+    .actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
     .btn {
-      border: 0; border-radius: 16px; padding: 14px 16px; font-size: 15px; font-weight: 700;
-      cursor: pointer; transition: transform .06s ease, opacity .15s ease;
+      width: auto;
+      min-width: 170px;
+      min-height: 52px;
+      padding: 14px 16px;
     }
-    .btn:active { transform: translateY(1px); }
-    .btn-primary { background: var(--brand); color: #fff; box-shadow: 0 10px 22px rgba(47,91,234,.24); }
-    .btn-secondary { background: #eef3ff; color: var(--brand); }
-    .btn-ghost { background: #f5f7fb; color: var(--text); border: 1px solid var(--line); }
-    .summary { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-    .chip { padding: 8px 10px; border-radius: 999px; background: #f5f7fb; border: 1px solid var(--line); font-size: 13px; color: #334155; }
-    .result-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
-    .result-title { margin: 0; font-size: clamp(24px, 3.8vw, 34px); line-height: 1.05; }
-    .ok {
-      display: inline-flex; gap: 8px; align-items: center; color: var(--success);
-      background: #ecfdf5; border: 1px solid #bbf7d0; padding: 8px 10px; border-radius: 999px; font-size: 13px; font-weight: 700;
+
+    .result-block h3 {
+      font-size: 17px;
     }
-    .warn {
-      display: inline-flex; gap: 8px; align-items: center; color: var(--danger);
-      background: #fef3f2; border: 1px solid #fecdca; padding: 10px 12px; border-radius: 16px; font-size: 14px; font-weight: 600;
+
+    .pre {
+      border-radius: 18px;
+      padding: 16px;
+      font-size: 15px;
     }
-    .result-block + .result-block { margin-top: 14px; }
-    .result-block h3 { margin: 0 0 8px; font-size: 17px; }
-    .pre { white-space: pre-wrap; word-break: break-word; background: #fbfcff; border: 1px solid var(--line); border-radius: 18px; padding: 16px; font-size: 15px; }
-    .empty { color: var(--muted); }
-    @media (min-width: 700px) { .grid.two { grid-template-columns: 1fr 1fr; } }
-  </style>
+  }
+</style>
 </head>
 <body>
   <div class="wrap">
@@ -111,12 +378,12 @@
         <div class="step">
           <div class="step-num">1</div>
           <div>
-            <h2>Выберите категорию</h2>
+            <h2 data-short="Категория">Выберите категорию</h2>
             <label for="category">Категория</label>
             <select id="category">
               <option value="">Выберите категорию</option>
             </select>
-            <div class="hint">Сначала выберите категорию. Тогда ниже появятся подходящие товарные группы.</div>
+            <div class="hint mobile-hide">Сначала выберите категорию. Тогда ниже появятся подходящие товарные группы.</div>
           </div>
         </div>
       </div>
@@ -125,12 +392,12 @@
         <div class="step">
           <div class="step-num">2</div>
           <div>
-            <h2>Выберите товарную группу</h2>
+            <h2 data-short="Товарная группа">Выберите товарную группу</h2>
             <label for="group">Товарная группа</label>
             <select id="group" disabled>
               <option value="">Сначала выберите категорию</option>
             </select>
-            <div class="hint">На этом шаге доступны только подходящие группы.</div>
+            <div class="hint mobile-hide">На этом шаге доступны только подходящие группы.</div>
           </div>
         </div>
       </div>
@@ -139,12 +406,12 @@
         <div class="step">
           <div class="step-num">3</div>
           <div>
-            <h2>Дополнительная группа</h2>
+            <h2 data-short="Подгруппа">Дополнительная группа</h2>
             <label for="extra">Дополнительная группа</label>
             <select id="extra" disabled>
               <option value="">Выберите дополнительную группу</option>
             </select>
-            <div class="hint">Этот шаг появляется только там, где он действительно нужен.</div>
+            <div class="hint mobile-hide">Этот шаг появляется только там, где он действительно нужен.</div>
           </div>
         </div>
       </div>
@@ -153,7 +420,7 @@
         <div class="result-head">
           <div>
             <div class="ok">Готово</div>
-            <h2 class="result-title">Результат</h2>
+            <h2 class="result-title" data-short="Результат">Результат</h2>
           </div>
         </div>
 
