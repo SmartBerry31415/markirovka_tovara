@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Поиск статуса маркировки</title>
   <meta name="description" content="Быстрый поиск кодов и текущего статуса маркировки по категории, товарной группе и дополнительной группе.">
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=US0FQLfROOOLzTI_0awmfCjJhv3pP4wlmNNoi3E6xs04DCGxs3y3HhFjErozy5kuw4-ZuWJDgmRVqupmwSMwPMj7a_J6kMh700JbmE5oDnkG5mbhv2DOYFa8N3fR_ncy3o8wKLt6MD9TT8cGS4fZRzb9FX_iknTMEygtgGA_MTMWhZlrQyxAFYboFaoMkJMuVBUGSzFH96r7J0dQHk_H6r76A5-jkvkVbRrc0kTfHa2gNPhFrZzY-0Tas9hlu_EXDKYpdv0dbKOLbQm0cXmL8g" charset="UTF-8"></script><style>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=uiOfqRgsEBYH-f6RBzpaZkftEiGJwqiCY85dWam1maE-5CFqPST4vLGxEuETe51Wv6cAfLiHnA_c-ncG90EktyTCDrJPYNIeat2s6kMvgxPUYFxlois9wej0sAYRPj6oKUWixzQ4CDkOpAm7_mlBTG8RjaWU9jEnw4nn9Ao_WoL66GKwqi2pWMKer_DtVeTEVxlo04baxgAT_YjP5YQtclLF62cHeha6ao6cIFV2lHwxmdwHJbA4HT5cGYPbklYahUkpJI8k3QqERvjp9rIeig" charset="UTF-8"></script><style>
   :root {
     --bg: #f5f7fb;
     --card: #ffffff;
@@ -381,7 +381,7 @@
             <h2 data-short="Категория">Выберите категорию</h2>
             <label for="category">Категория</label>
             <select id="category">
-              <option value="">Данные загружаются…</option>
+              <option value="">Загрузка данных…</option>
             </select>
             <div class="hint mobile-hide">Сначала выберите категорию. Тогда ниже появятся подходящие товарные группы.</div>
           </div>
@@ -395,7 +395,7 @@
             <h2 data-short="Товарная группа">Выберите товарную группу</h2>
             <label for="group">Товарная группа</label>
             <select id="group" disabled>
-              <option value="">Данные загружаются…</option>
+              <option value="">Сначала выберите категорию</option>
             </select>
             <div class="hint mobile-hide">На этом шаге доступны только подходящие группы.</div>
           </div>
@@ -416,35 +416,7 @@
         </div>
       </div>
 
-      <div class="card" id="loadingResultCard">
-            <div class="result-head">
-              <div>
-                <div class="ok">Загрузка</div>
-                <h2 class="result-title">Подготавливаем справочник</h2>
-              </div>
-            </div>
-            <div class="loading-note">Форма уже открыта. Варианты выбора появятся через мгновение.</div>
-
-            <div class="result-block" style="margin-top: 14px;">
-              <h3>Текущий статус маркировки</h3>
-              <div class="pre">
-                <div class="skeleton skeleton-line lg w-85"></div>
-                <div class="skeleton skeleton-line w-100"></div>
-                <div class="skeleton skeleton-line w-70"></div>
-              </div>
-            </div>
-
-            <div class="result-block">
-              <h3>Коды</h3>
-              <div class="pre">
-                <div class="skeleton skeleton-line w-55"></div>
-                <div class="skeleton skeleton-line w-100"></div>
-                <div class="skeleton skeleton-line w-85"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card hidden" id="resultCard" aria-live="polite">
+      <div class="card hidden" id="resultCard" aria-live="polite">
         <div class="result-head">
           <div>
             <div class="ok">Готово</div>
