@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Поиск статуса маркировки</title>
+  <meta name="description" content="Быстрый поиск кодов и текущего статуса маркировки по категории, товарной группе и дополнительной группе.">
+  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=Xm2e9vCHoLJ1Cw9fBLt4mhVA5iSC1SWxQMtBrtFDwm667fE7lUKiWRkp73PuVb3SDOIyVQmt0au6JMFikvMK6zq248sveiXsNONBzB9ffpxl7U4GD-0Ss4ESZ65SRT5jTrOqgmHvFgGj1RwuRHEgfbfIF_5xQsXObIE4_JQn5x4lqmsaFQlwJnyMpXLWDf-c0Kyc4j9hUccDM7boBDWj39h04hc80OCZhUeiR52TpqW8Vf0uH4ui3m5CnIlxaxDGtTMQCnjEFNl6Xr0UFJL8tg" charset="UTF-8"></script><style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --line: #d9e2f0;
+      --brand: #2f5bea;
+      --brand-soft: #eef3ff;
+      --success: #0f766e;
+      --danger: #b42318;
+      --shadow: 0 8px 28px rgba(23,32,51,.08);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: radial-gradient(circle at top left, #ffffff 0%, #f5f7fb 45%, #eef3ff 100%);
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 20px 16px 48px; }
+    .hero, .card {
+      background: #fff;
+      border: 1px solid rgba(47,91,234,.10);
+      box-shadow: var(--shadow);
+      border-radius: 28px;
+    }
+    .hero { padding: 20px; margin-bottom: 18px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 12px; border-radius: 999px;
+      background: var(--brand-soft); color: var(--brand);
+      font-weight: 700; font-size: 13px; margin-bottom: 12px;
+    }
+    h1 { margin: 0 0 10px; font-size: clamp(28px, 4vw, 44px); line-height: 1.05; letter-spacing: -.03em; }
+    .meta { margin-top: 12px; color: var(--muted); font-size: 14px; }
+    .grid { display: grid; gap: 14px; }
+    .card { padding: 18px; }
+    .step { display: grid; grid-template-columns: 42px 1fr; gap: 14px; align-items: start; }
+    .step-num {
+      width: 42px; height: 42px; border-radius: 999px; display: grid; place-items: center;
+      background: var(--brand-soft); color: var(--brand); font-weight: 800; font-size: 18px;
+    }
+    .step h2 { margin: 0 0 14px; font-size: clamp(20px, 3vw, 30px); line-height: 1.1; }
+    label { display: block; margin: 0 0 8px; font-size: 14px; font-weight: 700; }
+    select {
+      width: 100%; appearance: none; -webkit-appearance: none; background: #fff;
+      border: 1.5px solid #bdd0ff; border-radius: 18px; padding: 16px 48px 16px 16px;
+      font-size: 17px; line-height: 1.25; color: var(--text);
+      background-image:
+        linear-gradient(45deg, transparent 50%, #5c6f99 50%),
+        linear-gradient(135deg, #5c6f99 50%, transparent 50%);
+      background-position: calc(100% - 22px) calc(50% - 3px), calc(100% - 16px) calc(50% - 3px);
+      background-size: 6px 6px, 6px 6px; background-repeat: no-repeat;
+      box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+    }
+    select:disabled { background-color: #f3f6fb; color: #94a3b8; border-color: #d8e0ee; }
+    select:focus-visible, .btn:focus-visible { outline: 3px solid rgba(47,91,234,.18); outline-offset: 1px; }
+    .hint { margin-top: 8px; color: var(--muted); font-size: 13px; }
+    .hidden { display: none !important; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .btn {
+      border: 0; border-radius: 16px; padding: 14px 16px; font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: transform .06s ease, opacity .15s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--brand); color: #fff; box-shadow: 0 10px 22px rgba(47,91,234,.24); }
+    .btn-secondary { background: #eef3ff; color: var(--brand); }
+    .btn-ghost { background: #f5f7fb; color: var(--text); border: 1px solid var(--line); }
+    .summary { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .chip { padding: 8px 10px; border-radius: 999px; background: #f5f7fb; border: 1px solid var(--line); font-size: 13px; color: #334155; }
+    .result-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+    .result-title { margin: 0; font-size: clamp(24px, 3.8vw, 34px); line-height: 1.05; }
+    .ok {
+      display: inline-flex; gap: 8px; align-items: center; color: var(--success);
+      background: #ecfdf5; border: 1px solid #bbf7d0; padding: 8px 10px; border-radius: 999px; font-size: 13px; font-weight: 700;
+    }
+    .warn {
+      display: inline-flex; gap: 8px; align-items: center; color: var(--danger);
+      background: #fef3f2; border: 1px solid #fecdca; padding: 10px 12px; border-radius: 16px; font-size: 14px; font-weight: 600;
+    }
+    .result-block + .result-block { margin-top: 14px; }
+    .result-block h3 { margin: 0 0 8px; font-size: 17px; }
+    .pre { white-space: pre-wrap; word-break: break-word; background: #fbfcff; border: 1px solid var(--line); border-radius: 18px; padding: 16px; font-size: 15px; }
+    .empty { color: var(--muted); }
+    @media (min-width: 700px) { .grid.two { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="badge">Быстрый поиск из справочника</div>
+      <h1>Поиск статуса маркировки</h1>
+      <div class="meta" id="updatedAt">Последнее обновление: —</div>
+    </section>
+
+    <section class="grid">
+      <div class="card" id="errorCard" style="display:none;">
+        <div class="warn" id="errorText">Не удалось загрузить встроенные данные.</div>
+      </div>
+
+      <div class="card" id="step1Card">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>
+            <h2>Выберите категорию</h2>
+            <label for="category">Категория</label>
+            <select id="category">
+              <option value="">Выберите категорию</option>
+            </select>
+            <div class="hint">Сначала выберите категорию. Тогда ниже появятся подходящие товарные группы.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="step2Card">
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>
+            <h2>Выберите товарную группу</h2>
+            <label for="group">Товарная группа</label>
+            <select id="group" disabled>
+              <option value="">Сначала выберите категорию</option>
+            </select>
+            <div class="hint">На этом шаге доступны только подходящие группы.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card hidden" id="extraCard">
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>
+            <h2>Дополнительная группа</h2>
+            <label for="extra">Дополнительная группа</label>
+            <select id="extra" disabled>
+              <option value="">Выберите дополнительную группу</option>
+            </select>
+            <div class="hint">Этот шаг появляется только там, где он действительно нужен.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card hidden" id="resultCard" aria-live="polite">
+        <div class="result-head">
+          <div>
+            <div class="ok">Готово</div>
+            <h2 class="result-title">Результат</h2>
+          </div>
+        </div>
+
+        <div class="summary" id="summary"></div>
+
+        <div class="result-block">
+          <h3>Текущий статус маркировки</h3>
+          <div class="pre" id="statusOutput"></div>
+        </div>
+
+        <div class="result-block">
+          <h3>Коды</h3>
+          <div class="pre" id="codesOutput"></div>
+          <div class="actions">
+            <button class="btn btn-secondary" id="copyCodesBtn" type="button">Скопировать коды</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="actionsCard">
+        <div class="actions">
+          <button class="btn btn-primary" id="showBtn" type="button" disabled>Показать результат</button>
+          <button class="btn btn-ghost" id="resetBtn" type="button">Сбросить выбор</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="./data.js"></script>
+  <script>
+    const APP_DATA = window.APP_DATA;
+
+    const els = {
+      errorCard: document.getElementById('errorCard'),
+      errorText: document.getElementById('errorText'),
+      updatedAt: document.getElementById('updatedAt'),
+      extraCard: document.getElementById('extraCard'),
+      category: document.getElementById('category'),
+      group: document.getElementById('group'),
+      extra: document.getElementById('extra'),
+      resultCard: document.getElementById('resultCard'),
+      showBtn: document.getElementById('showBtn'),
+      resetBtn: document.getElementById('resetBtn'),
+      codesOutput: document.getElementById('codesOutput'),
+      statusOutput: document.getElementById('statusOutput'),
+      summary: document.getElementById('summary'),
+      copyCodesBtn: document.getElementById('copyCodesBtn'),
+    };
+
+    function fillSelect(select, values, placeholder) {
+      const fragment = document.createDocumentFragment();
+
+      const first = document.createElement('option');
+      first.value = '';
+      first.textContent = placeholder;
+      fragment.appendChild(first);
+
+      values.forEach(value => {
+        const opt = document.createElement('option');
+        opt.value = value;
+        opt.textContent = value;
+        fragment.appendChild(opt);
+      });
+
+      select.innerHTML = '';
+      select.appendChild(fragment);
+    }
+
+    function resetResult() {
+      els.resultCard.classList.add('hidden');
+      els.codesOutput.textContent = '';
+      els.statusOutput.textContent = '';
+      els.summary.innerHTML = '';
+    }
+
+    function updateButtons() {
+      const category = els.category.value;
+      const group = els.group.value;
+      const extraRequired = !els.extraCard.classList.contains('hidden');
+      const extraReady = !extraRequired || Boolean(els.extra.value);
+      els.showBtn.disabled = !(category && group && extraReady);
+    }
+
+    function populateCategories() {
+      fillSelect(els.category, APP_DATA.categories || [], 'Выберите категорию');
+    }
+
+    function onCategoryChange() {
+      resetResult();
+
+      const category = els.category.value;
+      els.extraCard.classList.add('hidden');
+      els.extra.disabled = true;
+      fillSelect(els.extra, [], 'Выберите дополнительную группу');
+
+      if (!category) {
+        els.group.disabled = true;
+        fillSelect(els.group, [], 'Сначала выберите категорию');
+        updateButtons();
+        return;
+      }
+
+      const groups = Object.keys(APP_DATA.tree?.[category] || {});
+      els.group.disabled = false;
+      fillSelect(els.group, groups, 'Выберите товарную группу');
+      updateButtons();
+    }
+
+    function onGroupChange() {
+      resetResult();
+
+      const category = els.category.value;
+      const group = els.group.value;
+
+      if (!category || !group) {
+        els.extraCard.classList.add('hidden');
+        els.extra.disabled = true;
+        fillSelect(els.extra, [], 'Выберите дополнительную группу');
+        updateButtons();
+        return;
+      }
+
+      const extras = APP_DATA.tree?.[category]?.[group] || [];
+      if (extras.length) {
+        els.extraCard.classList.remove('hidden');
+        els.extra.disabled = false;
+        fillSelect(els.extra, extras, 'Выберите дополнительную группу');
+      } else {
+        els.extraCard.classList.add('hidden');
+        els.extra.disabled = true;
+        fillSelect(els.extra, [], 'Выберите дополнительную группу');
+      }
+
+      updateButtons();
+    }
+
+    function selectedKey() {
+      return [
+        els.category.value || '',
+        els.group.value || '',
+        els.extraCard.classList.contains('hidden') ? '' : (els.extra.value || ''),
+      ].join('|||');
+    }
+
+    function renderSummary(parts) {
+      els.summary.innerHTML = '';
+      parts.filter(Boolean).forEach(part => {
+        const chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.textContent = part;
+        els.summary.appendChild(chip);
+      });
+    }
+
+    function showResult() {
+      const key = selectedKey();
+      const record = APP_DATA.results?.[key];
+
+      if (!record) {
+        els.resultCard.classList.remove('hidden');
+        els.statusOutput.innerHTML = '<span class="empty">Для выбранной комбинации данных пока нет.</span>';
+        els.codesOutput.textContent = '';
+        renderSummary([els.category.value, els.group.value, els.extra.value]);
+        return;
+      }
+
+      els.statusOutput.textContent = record.status || '';
+      els.codesOutput.textContent = record.codes || '';
+      renderSummary([els.category.value, els.group.value, els.extra.value]);
+      els.resultCard.classList.remove('hidden');
+    }
+
+    async function copyText(text, button) {
+      if (!text) return;
+
+      const original = button.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = 'Скопировано';
+      } catch {
+        button.textContent = 'Не удалось скопировать';
+      }
+
+      setTimeout(() => {
+        button.textContent = original;
+      }, 1200);
+    }
+
+    function resetAll() {
+      els.category.value = '';
+      els.group.disabled = true;
+      fillSelect(els.group, [], 'Сначала выберите категорию');
+      els.extraCard.classList.add('hidden');
+      els.extra.disabled = true;
+      fillSelect(els.extra, [], 'Выберите дополнительную группу');
+      resetResult();
+      updateButtons();
+    }
+
+    function init() {
+      if (!APP_DATA || !Array.isArray(APP_DATA.categories)) {
+        els.errorCard.style.display = '';
+        els.errorText.textContent = 'Файл data.js не найден или имеет неверный формат.';
+        return;
+      }
+
+      const updateText = APP_DATA.generatedAtDisplay
+        || (APP_DATA.generatedAt ? new Date(APP_DATA.generatedAt).toLocaleString('ru-RU') : 'дата не указана');
+      els.updatedAt.textContent = `Последнее обновление: ${updateText}`;
+
+      populateCategories();
+
+      els.category.addEventListener('change', onCategoryChange);
+      els.group.addEventListener('change', onGroupChange);
+      els.extra.addEventListener('change', updateButtons);
+      els.showBtn.addEventListener('click', showResult);
+      els.resetBtn.addEventListener('click', resetAll);
+      els.copyCodesBtn.addEventListener('click', () => copyText(els.codesOutput.textContent, els.copyCodesBtn));
+
+      updateButtons();
+    }
+
+    init();
+  </script>
+</body>
+</html>
